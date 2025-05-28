@@ -1,5 +1,34 @@
 from time import sleep
 import random
+from colorama import Fore, Style, init
+init()
+
+def menucomp():
+    print("\nTabuleiro Computador: \n")
+    sleep(1)
+    for j in tabuleiroComp:
+        print(j)
+    sleep(1)
+    print(f"\nNavios restantes: {compNav} \n")
+    print("---------------------------------")
+    sleep(1)
+
+def menuplayer():
+    print("Tabuleiro Player: \n")
+    sleep(1)
+    for j in tabuleiroPlayer:
+        print(j)
+    sleep(1)
+    print(f"\nNavios restantes: {playerNav}")
+    print("---------------------------------")
+    sleep(1)
+
+
+
+
+
+
+
 playermatriz5 = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -66,22 +95,8 @@ while playerNav < 5:
 
 
 #printa tabuleiros e navios restantes
-print("\nTabuleiro Computador: \n")
-sleep(1)
-for j in tabuleiroComp:
-    print(j)
-sleep(1)
-print(f"\nNavios restantes: {compNav} \n")
-
-sleep(1)
-
-print("Tabuleiro Player: \n")
-sleep(1)
-for j in tabuleiroPlayer:
-    print(j)
-sleep(1)
-print(f"\nNavios restantes: {playerNav}")
-sleep(1)
+menucomp()
+menuplayer()
 
 
 #Roda enquanto tiver o computador ou jogador possuir navios
@@ -92,6 +107,7 @@ while playerNav > 0 and compNav > 0:
     jogadorColuna = int(input("\nEscolha a coluna que deseja atirar: "))
     jogadorColuna -= 1
     jogadorLinha -= 1
+    print("---------------------------------")
 
     if compmatriz5[jogadorLinha][jogadorColuna] == "1":
         print("\nVocê derrubou um navio!")
@@ -104,13 +120,7 @@ while playerNav > 0 and compNav > 0:
         sleep(1)
         tabuleiroComp[jogadorLinha][jogadorColuna] = "O"
 
-    print("\nTabuleiro Computador:\n")
-    sleep(1)
-    for j in tabuleiroComp:
-        print(j)
-    sleep(1)
-    print(f"\nNavios restantes: {compNav} \n")
-    sleep(1)
+    menucomp()
 
 
 #escolha da linha e coluna do computador
@@ -120,23 +130,16 @@ while playerNav > 0 and compNav > 0:
     print(f"\nComputador atacou sua linha {compLinha + 1} e coluna {compColuna + 1}")
     sleep(1)
     if playermatriz5[compLinha][compColuna] == "1":
-        print("\nDerrubaram um navio seu!")
+        print("\nDerrubaram um navio seu!\n")
         sleep(1)
         playerNav -= 1
         tabuleiroPlayer[compLinha][compColuna] = "X"
     else:
-        print("\nNão derrubaram nenhum navio seu!")
+        print("\nNão derrubaram nenhum navio seu!\n")
         sleep(1)
         tabuleiroPlayer[compLinha][compColuna] = "O"
-    print("\nTabuleiro Player: \n")
-    sleep(1)
-    for j in tabuleiroPlayer:
-        print(j)
-    sleep(1)
-    print(f"\nNavios restantes: {playerNav}")
-    sleep(1)
 
-
+    menuplayer()
 
 #Printa vencedor e agradecimento
 if playerNav == 0:
