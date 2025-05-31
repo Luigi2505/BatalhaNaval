@@ -1,7 +1,6 @@
 from time import sleep
 import random
-from colorama import Fore, Style, init
-init()
+
 
 def menucomp():
     print("\nTabuleiro Computador: \n")
@@ -22,6 +21,23 @@ def menuplayer():
     print(f"\nNavios restantes: {playerNav}")
     print("---------------------------------")
     sleep(1)
+
+def atqPlayerLinha():
+    while True:
+        playerLinha = int(input("\nEscolha uma linha entre 1 e 5: "))
+        if 1 <= playerLinha <= 5:
+            return playerLinha - 1
+        else:
+            print("Linha inválida! Escolha entre 1 e 5.")
+
+def atqPlayerColuna():
+    while True:
+        playerColuna = int(input("\nEscolha uma coluna entre 1 e 10: "))
+        if 1 <= playerColuna <= 10:
+            return playerColuna - 1
+        else:
+            print("Coluna inválida! Escolha entre 1 e 10.")
+
 
 
 playermatriz5 = [
@@ -77,9 +93,20 @@ i = 0
 while playerNav < 5:
     i += 1
     linha = int(input(f"Escolha a {i}° linha do seu navio: "))
+    while linha > 5:
+        print("Escolha uma linha menor ou igual a 5!")
+        linha = int(input(f"Escolha a {i}° linha do seu navio: "))
+
     coluna = int(input(f"Escolha a {i}° coluna do seu navio: "))
-    coluna -= 1
-    linha -= 1
+    while coluna > 10:
+        print("Escolha uma coluna menor ou igual a 10!")
+        coluna = int(input(f"Escolha a {i}° coluna do seu navio: "))
+
+    if linha <=5:
+        linha -= 1
+    if coluna <=10:
+        coluna -= 1
+
     # impede que o jogador escolha no mesmo lugar
     if playermatriz5[linha][coluna] != "1":
         playerNav +=1
@@ -97,30 +124,41 @@ menuplayer()
 #Roda enquanto tiver o computador ou jogador possuir navios
 while playerNav > 0 and compNav > 0:
 
-    # escolha da linha e coluna do player
-    jogadorLinha = int(input("\nEscolha a linha que deseja atirar: "))
-    jogadorColuna = int(input("\nEscolha a coluna que deseja atirar: "))
-    jogadorColuna -= 1
-    jogadorLinha -= 1
+    # Ataque do player
+    playerLinha = atqPlayerLinha()
+    playerColuna = atqPlayerColuna()
+
+    while tabuleiroComp[playerLinha][playerColuna] == "O" or tabuleiroComp[playerLinha][playerColuna] == "X":
+        playerLinha = int(input("\nLinha ja escolhida! Escolha outra: "))
+        atqPlayerLinha()
+        playerColuna = int(input("\nColuna ja escolhida! Escolha outra: "))
+        atqPlayerColuna()
+
+
     print("---------------------------------")
 
-    if compmatriz5[jogadorLinha][jogadorColuna] == "1":
+    if compmatriz5[playerLinha][playerColuna] == "1":
         print("\nVocê derrubou um navio!")
         sleep(1)
         compNav -= 1
-        tabuleiroComp[jogadorLinha][jogadorColuna] = "X"
+        tabuleiroComp[playerLinha][playerColuna] = "X"
 
     else:
         print("\nVocê não acertou nenhum navio!")
         sleep(1)
-        tabuleiroComp[jogadorLinha][jogadorColuna] = "O"
+        tabuleiroComp[playerLinha][playerColuna] = "O"
 
     menucomp()
 
 
-#escolha da linha e coluna do computador
+#Ataque do computador
     compLinha = random.randint(0, 4)
     compColuna = random.randint(0, 9)
+
+    while tabuleiroPlayer[compLinha][compColuna] == "O" or tabuleiroPlayer[compLinha][compColuna] == "X":
+        compLinha = random.randint(0, 4)
+        compColuna = random.randint(0, 9)
+
 
     print(f"\nComputador atacou sua linha {compLinha + 1} e coluna {compColuna + 1}")
     sleep(1)
