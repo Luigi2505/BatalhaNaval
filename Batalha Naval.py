@@ -129,10 +129,9 @@ while playerNav > 0 and compNav > 0:
     playerColuna = atqPlayerColuna()
 
     while tabuleiroComp[playerLinha][playerColuna] == "O" or tabuleiroComp[playerLinha][playerColuna] == "X":
-        playerLinha = int(input("\nLinha ja escolhida! Escolha outra: "))
-        atqPlayerLinha()
-        playerColuna = int(input("\nColuna ja escolhida! Escolha outra: "))
-        atqPlayerColuna()
+        print("\nLinha e Coluna já escolhidas!")
+        playerLinha = atqPlayerLinha()
+        playerColuna = atqPlayerColuna()
 
 
     print("---------------------------------")
