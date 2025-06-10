@@ -1,27 +1,28 @@
 from time import sleep
 import random
 
-
+#função do tabuleiro e navios restantes do computador
 def menucomp():
-    print("\nTabuleiro Computador: \n")
+    print("\nTabuleiro do Computador: \n")
     sleep(1)
     for j in tabuleiroComp:
         print(j)
     sleep(1)
-    print(f"\nNavios restantes: {compNav} \n")
+    print(f"\nNavios restantes do Computador: {compNav} \n")
     print("---------------------------------")
     sleep(1)
 
+#função do tabuleiro e navios restantes do jogador
 def menuplayer():
-    print("Tabuleiro Player: \n")
+    print("Tabuleiro do Player: \n")
     sleep(1)
     for j in tabuleiroPlayer:
         print(j)
     sleep(1)
-    print(f"\nNavios restantes: {playerNav}")
+    print(f"\nNavios restantes do Player: {playerNav}")
     print("---------------------------------")
     sleep(1)
-
+#função de ataque do player para linha e coluna do computador
 def atqPlayerLinha():
     while True:
         playerLinha = int(input("\nEscolha uma linha entre 1 e 5: "))
@@ -39,7 +40,7 @@ def atqPlayerColuna():
             print("Coluna inválida! Escolha entre 1 e 10.")
 
 
-
+#matrizes dos tabuleiros
 playermatriz5 = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -72,7 +73,7 @@ tabuleiroComp = [
 
 
 print("Você vai jogar batalha naval!!!")
-player = input("Qual o seu nome?: ")
+player = input("Escolha um Nome: ")
 
 #inicia a quantidade de navios
 playerNav = 0
@@ -107,7 +108,7 @@ while playerNav < 5:
     if coluna <=10:
         coluna -= 1
 
-    # impede que o jogador escolha no mesmo lugar
+    # impede que o jogador escolha a mesma linha e coluna
     if playermatriz5[linha][coluna] != "1":
         playerNav +=1
     else:
@@ -121,13 +122,13 @@ menucomp()
 menuplayer()
 
 
-#Roda enquanto tiver o computador ou jogador possuir navios
+#loop para o codigo ser lido enquanto tiver navios do computador ou do player em jogo
 while playerNav > 0 and compNav > 0:
 
     # Ataque do player
     playerLinha = atqPlayerLinha()
     playerColuna = atqPlayerColuna()
-
+#impedindo o jogador de atacar o mesmo lugar
     while tabuleiroComp[playerLinha][playerColuna] == "O" or tabuleiroComp[playerLinha][playerColuna] == "X":
         print("\nLinha e Coluna já escolhidas!")
         playerLinha = atqPlayerLinha()
@@ -181,13 +182,3 @@ else:
 
 sleep(1)
 print("Obrigado por jogar Batalha Naval \nFeito por \nEric Juan\nLuigi Bilyk\nGuilherme Albuquerque")
-
-
-
-
-
-
-
-
-
-
