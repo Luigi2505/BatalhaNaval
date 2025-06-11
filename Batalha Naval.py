@@ -65,7 +65,7 @@ def validar_ataque(matriz, linha, coluna, jogador):
 def colocar_navio_direcional(tabuleiro, tamanho_navio):
     max_linhas = 10
     max_colunas = 10
-    direcoes = ['cima', 'baixo', 'esquerda', 'direita']
+    direcoes = ["cima", "baixo", "esquerda", "direita"]
 
     while True:
         linha = random.randint(0, max_linhas - 1)
@@ -75,7 +75,6 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
         valido = True
 
         for i in range(tamanho_navio):
-            #verifica direção
             if direcao == "cima":
                 nova_linha, nova_coluna = linha - i, coluna
             elif direcao == "baixo":
@@ -99,7 +98,7 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
 
         if valido:
             for l, c in posicoes:
-                tabuleiro[l][c] = '1'
+                tabuleiro[l][c] = "1"
             return True
 
 #Inicio do jogo
