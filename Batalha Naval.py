@@ -2,26 +2,19 @@ from time import sleep
 import random
 
 
-def menucomp():
-    print("\nTabuleiro Computador: \n")
+
+#Função para exibir o tabuleiro e navios restantes
+def menu(jogador, matriz, navio):
+    print(f"\nTabuleiro {jogador}: \n")
     sleep(1)
-    for j in tabuleiroComp:
-        print(j)
+    for i in matriz:
+        print(i)
     sleep(1)
-    print(f"\nNavios restantes: {compNav} \n")
+    print(f"\nNavios restantes: {navio} \n")
     print("---------------------------------")
     sleep(1)
 
-def menuplayer():
-    print("Tabuleiro Player: \n")
-    sleep(1)
-    for j in playermatriz:
-        print(j)
-    sleep(1)
-    print(f"\nNavios restantes: {playerNav}")
-    print("---------------------------------")
-    sleep(1)
-
+#Funçao para posicionar os navios nos tabuleiros
 def colocar_navio_direcional(tabuleiro, tamanho_navio):
     max_linhas = 10
     max_colunas = 10
@@ -59,34 +52,55 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
                 tabuleiro[l][c] = '1'
             return True
 
-
+#funçao para atacar
 def ataque(direcao):
     while True:
         valor = int(input(f"\nEscolha uma {direcao} entre 1 e 10: "))
-        if valor >= 1 and valor <= 10:
+        if 1 <= valor <= 10:
             return valor - 1
         else:
             print(f"{direcao} inválida! Digite um número entre 1 e 10.")
 
+#
+def processar_ataque(linha, coluna, matriz, navio, jogador, tabuleiro):
+    print("---------------------------------")
+    if matriz[linha][coluna] == "1":
+        print(f"\n{jogador} derrubou um navio!")
+        sleep(1)
+        navio -= 1
+        tabuleiro[linha][coluna] = "X"
+    else:
+        print(f"\n{jogador} não acertou nenhum navio!")
+        sleep(1)
+        tabuleiro[linha][coluna] = "O"
+    return navio
 
 playermatriz = []
 compmatriz = []
 tabuleiroComp = []
-
-def criarMatriz():
+def criarmatriz():
     matriz = []
     for linha in range(10):
         coluna = ["-"] * 10
         matriz.append(coluna)
     return matriz
+playermatriz = criarmatriz()
+compmatriz = criarmatriz()
+tabuleiroComp = criarmatriz()
 
-playermatriz = criarMatriz()
-compmatriz = criarMatriz()
-tabuleiroComp = criarMatriz()
+def validar_ataque(matriz, linha, coluna, jogador):
+    while matriz[linha][coluna] == "O" or matriz[linha][coluna] == "X":
+        if jogador == "Player":
+            print("\nLinha e Coluna já escolhidas!")
+            linha = ataque("linha")
+            coluna = ataque("coluna")
+        elif jogador == "Computador":
+            linha = random.randint(0, 9)
+            coluna = random.randint(0, 9)
+    return linha, coluna
 
 print("Você vai jogar batalha naval!!!")
 player = input("Qual o seu nome?: ")
-
 
 # Define posições dos navios do jogador
 playerNav = 0
@@ -111,8 +125,8 @@ sleep(1)
 
 
 # printa tabuleiros e navios restantes
-menucomp()
-menuplayer()
+menu("Computador", tabuleiroComp, compNav)
+menu("Player", playermatriz, playerNav)
 
 # Roda enquanto tiver o computador ou jogador possuir navios
 while playerNav > 0 and compNav > 0:
@@ -121,47 +135,19 @@ while playerNav > 0 and compNav > 0:
     playerLinha = ataque("linha")
     playerColuna = ataque("coluna")
 
-    while tabuleiroComp[playerLinha][playerColuna] == "O" or tabuleiroComp[playerLinha][playerColuna] == "X":
-        print("\nLinha e Coluna já escolhidas!")
-        playerLinha = ataque("linha")
-        playerColuna = ataque("coluna")
+    playerLinha, playerColuna = validar_ataque(tabuleiroComp, playerLinha, playerColuna, "Player")
 
-    print("---------------------------------")
-
-    if compmatriz[playerLinha][playerColuna] == "1":
-        print("\nVocê derrubou um navio!")
-        sleep(1)
-        compNav -= 1
-        tabuleiroComp[playerLinha][playerColuna] = "X"
-
-    else:
-        print("\nVocê não acertou nenhum navio!")
-        sleep(1)
-        tabuleiroComp[playerLinha][playerColuna] = "O"
-
-    menucomp()
+    compNav = processar_ataque(playerLinha, playerColuna, compmatriz, compNav, "Você", tabuleiroComp)
+    menu("Computador", tabuleiroComp, compNav)
 
     # Ataque do computador
     compLinha = random.randint(0, 9)
     compColuna = random.randint(0, 9)
 
-    while playermatriz[compLinha][compColuna] == "O" or playermatriz[compLinha][compColuna] == "X":
-        compLinha = random.randint(0, 9)
-        compColuna = random.randint(0, 9)
+    compLinha, compColuna = validar_ataque(playermatriz, compLinha, compColuna, "Computador")
 
-    print(f"\nComputador atacou sua linha {compLinha + 1} e coluna {compColuna + 1}")
-    sleep(1)
-    if playermatriz[compLinha][compColuna] == "1":
-        print("\nDerrubaram um navio seu!\n")
-        sleep(1)
-        playerNav -= 1
-        playermatriz[compLinha][compColuna] = "X"
-    else:
-        print("\nNão derrubaram nenhum navio seu!\n")
-        sleep(1)
-        playermatriz[compLinha][compColuna] = "O"
-
-    menuplayer()
+    playerNav = processar_ataque(compLinha, compColuna, playermatriz, playerNav, "Computador", playermatriz)
+    menu("Player", playermatriz, playerNav)
 
 # Printa vencedor e agradecimento
 if playerNav == 0:
