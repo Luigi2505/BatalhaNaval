@@ -1,8 +1,6 @@
 from time import sleep
 import random
 
-
-
 #Função para exibir o tabuleiro e navios restantes
 def menu(jogador, matriz, navio):
     print(f"\nTabuleiro {jogador}: \n")
@@ -14,8 +12,6 @@ def menu(jogador, matriz, navio):
     print("---------------------------------")
     sleep(1)
 
-
-
 #funçao para atacar
 def ataque(direcao):
     while True:
@@ -25,7 +21,7 @@ def ataque(direcao):
         else:
             print(f"{direcao} inválida! Digite um número entre 1 e 10.")
 
-#
+#processa o ataque atualizando as matrizes
 def processar_ataque(linha, coluna, matriz, navio, jogador, tabuleiro):
     print("---------------------------------")
     if matriz[linha][coluna] == "1":
@@ -39,10 +35,10 @@ def processar_ataque(linha, coluna, matriz, navio, jogador, tabuleiro):
         tabuleiro[linha][coluna] = "O"
     return navio
 
+#função para criar matriz
 playermatriz = []
 compmatriz = []
 tabuleiroComp = []
-#função para criar matriz
 def criarmatriz():
     matriz = []
     for linha in range(10):
@@ -53,6 +49,7 @@ playermatriz = criarmatriz()
 compmatriz = criarmatriz()
 tabuleiroComp = criarmatriz()
 
+#funçao para checar se a coordenada ja foi atacada antes
 def validar_ataque(matriz, linha, coluna, jogador):
     while matriz[linha][coluna] == "O" or matriz[linha][coluna] == "X":
         if jogador == "Player":
@@ -104,10 +101,11 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
                 tabuleiro[l][c] = '1'
             return True
 
+#Inicio do jogo
 print("Você vai jogar batalha naval!!!")
 player = input("Qual o seu nome?: ")
 
-# Define posições dos navios do jogador
+# Inicia contador de navios
 playerNav = 0
 compNav = 0
 
