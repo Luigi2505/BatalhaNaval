@@ -78,11 +78,12 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
         valido = True
 
         for i in range(tamanho_navio):
-            if direcao == 'cima':
+            #verifica direção
+            if direcao == "cima":
                 nova_linha, nova_coluna = linha - i, coluna
-            elif direcao == 'baixo':
+            elif direcao == "baixo":
                 nova_linha, nova_coluna = linha + i, coluna
-            elif direcao == 'esquerda':
+            elif direcao == "esquerda":
                 nova_linha, nova_coluna = linha, coluna - i
             else:  # 'direita'
                 nova_linha, nova_coluna = linha, coluna + i
@@ -90,7 +91,7 @@ def colocar_navio_direcional(tabuleiro, tamanho_navio):
             #verifica se esta dentro da matriz
             if 0 <= nova_linha < max_linhas and 0 <= nova_coluna < max_colunas:
                 #verifica se não existe um barco nessa posição
-                if tabuleiro[nova_linha][nova_coluna] == '-':
+                if tabuleiro[nova_linha][nova_coluna] == "-":
                     posicoes.append((nova_linha, nova_coluna))
                 else:
                     valido = False
