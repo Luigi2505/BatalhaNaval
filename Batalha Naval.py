@@ -14,43 +14,7 @@ def menu(jogador, matriz, navio):
     print("---------------------------------")
     sleep(1)
 
-#Funçao para posicionar os navios nos tabuleiros
-def colocar_navio_direcional(tabuleiro, tamanho_navio):
-    max_linhas = 10
-    max_colunas = 10
-    direcoes = ['cima', 'baixo', 'esquerda', 'direita']
 
-    while True:
-        linha = random.randint(0, max_linhas - 1)
-        coluna = random.randint(0, max_colunas - 1)
-        direcao = random.choice(direcoes)
-        posicoes = []
-        valido = True
-
-        for i in range(tamanho_navio):
-            if direcao == 'cima':
-                nova_linha, nova_coluna = linha - i, coluna
-            elif direcao == 'baixo':
-                nova_linha, nova_coluna = linha + i, coluna
-            elif direcao == 'esquerda':
-                nova_linha, nova_coluna = linha, coluna - i
-            else:  # 'direita'
-                nova_linha, nova_coluna = linha, coluna + i
-
-            if 0 <= nova_linha < max_linhas and 0 <= nova_coluna < max_colunas:
-                if tabuleiro[nova_linha][nova_coluna] == '-':
-                    posicoes.append((nova_linha, nova_coluna))
-                else:
-                    valido = False
-                    break
-            else:
-                valido = False
-                break
-
-        if valido:
-            for l, c in posicoes:
-                tabuleiro[l][c] = '1'
-            return True
 
 #funçao para atacar
 def ataque(direcao):
@@ -78,6 +42,7 @@ def processar_ataque(linha, coluna, matriz, navio, jogador, tabuleiro):
 playermatriz = []
 compmatriz = []
 tabuleiroComp = []
+#função para criar matriz
 def criarmatriz():
     matriz = []
     for linha in range(10):
@@ -98,6 +63,46 @@ def validar_ataque(matriz, linha, coluna, jogador):
             linha = random.randint(0, 9)
             coluna = random.randint(0, 9)
     return linha, coluna
+
+#Funçao para posicionar os navios nos tabuleiros
+def colocar_navio_direcional(tabuleiro, tamanho_navio):
+    max_linhas = 10
+    max_colunas = 10
+    direcoes = ['cima', 'baixo', 'esquerda', 'direita']
+
+    while True:
+        linha = random.randint(0, max_linhas - 1)
+        coluna = random.randint(0, max_colunas - 1)
+        direcao = random.choice(direcoes)
+        posicoes = []
+        valido = True
+
+        for i in range(tamanho_navio):
+            if direcao == 'cima':
+                nova_linha, nova_coluna = linha - i, coluna
+            elif direcao == 'baixo':
+                nova_linha, nova_coluna = linha + i, coluna
+            elif direcao == 'esquerda':
+                nova_linha, nova_coluna = linha, coluna - i
+            else:  # 'direita'
+                nova_linha, nova_coluna = linha, coluna + i
+            
+            #verifica se esta dentro da matriz
+            if 0 <= nova_linha < max_linhas and 0 <= nova_coluna < max_colunas:
+                #verifica se não existe um barco nessa posição
+                if tabuleiro[nova_linha][nova_coluna] == '-':
+                    posicoes.append((nova_linha, nova_coluna))
+                else:
+                    valido = False
+                    break
+            else:
+                valido = False
+                break
+
+        if valido:
+            for l, c in posicoes:
+                tabuleiro[l][c] = '1'
+            return True
 
 print("Você vai jogar batalha naval!!!")
 player = input("Qual o seu nome?: ")
