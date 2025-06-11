@@ -1,46 +1,91 @@
 from time import sleep
 import random
 
-
 def menucomp():
     print("\nTabuleiro Computador: \n")
     sleep(1)
     for j in tabuleiroComp:
         print(j)
     sleep(1)
-    print(f"\nNavios restantes: {compNav} \n")
+    print(f"\nSegmentos de navios restantes do Computador: {compNav} \n")
     print("---------------------------------")
     sleep(1)
 
 def menuplayer():
+    # Comportamento original: Mostra o tabuleiro de ataques recebidos.
     print("Tabuleiro Player: \n")
     sleep(1)
-    for j in tabuleiroPlayer:
+    for j in playermatriz5:
         print(j)
     sleep(1)
-    print(f"\nNavios restantes: {playerNav}")
+    print(f"\nSeus segmentos de navios restantes: {playerNav}")
     print("---------------------------------")
     sleep(1)
 
 def atqPlayerLinha():
     while True:
-        playerLinha = int(input("\nescolhaColunaa uma linha entre 1 e 5: "))
-        if 1 <= playerLinha <= 5:
-            return playerLinha - 1
-        else:
-            print("Linha inválida! escolhaColunaa entre 1 e 5.")
+        try:
+            playerLinha = int(input("\nEscolha uma linha para atacar (1 a 10): "))
+            if 1 <= playerLinha <= 10:
+                return playerLinha - 1
+            else:
+                print("Linha inválida! Escolha um número entre 1 e 10.")
+        except ValueError:
+            print("Entrada inválida! Por favor, digite um número.")
+
 
 def atqPlayerColuna():
     while True:
-        playerColuna = int(input("\nescolhaColunaa uma coluna entre 1 e 10: "))
-        if 1 <= playerColuna <= 10:
-            return playerColuna - 1
-        else:
-            print("Coluna inválida! escolhaColunaa entre 1 e 10.")
+        try:
+            playerColuna = int(input("Escolha uma coluna para atacar (1 a 10): "))
+            if 1 <= playerColuna <= 10:
+                return playerColuna - 1
+            else:
+                print("Coluna inválida! Escolha um número entre 1 e 10.")
+        except ValueError:
+            print("Entrada inválida! Por favor, digite um número.")
 
 
+def colocar_navio_direcional(tabuleiro, tamanho_navio):
+    max_linhas = 10
+    max_colunas = 10
+    direcoes = ['cima', 'baixo', 'esquerda', 'direita']
 
+    while True:
+        linha = random.randint(0, max_linhas - 1)
+        coluna = random.randint(0, max_colunas - 1)
+        direcao = random.choice(direcoes)
+        posicoes = []
+        valido = True
+
+        for i in range(tamanho_navio):
+            if direcao == 'cima':
+                nova_linha, nova_coluna = linha - i, coluna
+            elif direcao == 'baixo':
+                nova_linha, nova_coluna = linha + i, coluna
+            elif direcao == 'esquerda':
+                nova_linha, nova_coluna = linha, coluna - i
+            else:  # 'direita'
+                nova_linha, nova_coluna = linha, coluna + i
+
+            if 0 <= nova_linha < max_linhas and 0 <= nova_coluna < max_colunas:
+                if tabuleiro[nova_linha][nova_coluna] == '-':
+                    posicoes.append((nova_linha, nova_coluna))
+                else:
+                    valido = False
+                    break
+            else:
+                valido = False
+                break
+
+        if valido:
+            for l, c in posicoes:
+                tabuleiro[l][c] = '1'
+            return True
+
+# Suas matrizes originais, agora com 10 linhas e 10 colunas
 playermatriz5 = [
+
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
@@ -51,8 +96,11 @@ playermatriz5 = [
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+
 ]
+
 compmatriz5 = [
+
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
@@ -63,9 +111,10 @@ compmatriz5 = [
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
-]
 
+]
 tabuleiroPlayer = [
+
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
@@ -76,8 +125,11 @@ tabuleiroPlayer = [
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+
 ]
+
 tabuleiroComp = [
+
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
@@ -88,176 +140,103 @@ tabuleiroComp = [
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+
 ]
 
 
-print("Você vai jogar batalha naval!!!")
+print("Você vai jogar Batalha Naval 10x10!!!")
 player = input("Qual o seu nome?: ")
 
-#inicia a quantidade de navios
+# Inicia a quantidade de segmentos de navios
 playerNav = 0
 compNav = 0
 
+# Lista com os tamanhos dos navios
+tamanhos_navios = [5, 4, 3, 2, 1]
 
-#Define posições dos navios do computador
-while True:
-    comparacao = 0
-    tamanhoNav =  5 - compNav
-    tamanhoCerto = 5 - compNav
-    escolhaLinha = random.randint(0, 9)
-    escolhaColuna = random.randint(0, 9)
-    direcao = random.randint(0,3) #0 = horizontal direita, 1 = horizontal esquerta, 2 = vertical baixo, 3 vertigal cima
-    
-    if escolhaColuna + tamanhoNav <= 10 and direcao == 0 and compmatriz5[escolhaLinha][escolhaColuna] == "-": 
-        for i in range(tamanhoNav):
-            if compmatriz5[escolhaLinha][escolhaColuna] == "-":
-                compmatriz5[escolhaLinha][escolhaColuna] = "1"
-                escolhaColuna = escolhaColuna + 1
-                tamanhoNav -= 1 
-                comparacao += 1
-            elif compmatriz5[escolhaLinha][escolhaColuna] == "1":
-                escolhaColuna = escolhaColuna - 1
-                compmatriz5[escolhaLinha][escolhaColuna] = "-"
-                tamanhoNav -= 1 
-                comparacao = 0
-        if comparacao == tamanhoCerto: 
-            compNav += 1
-    if escolhaColuna - tamanhoNav >= 0 and direcao == 1 and compmatriz5[escolhaLinha][escolhaColuna] == "-":
-        for i in range(tamanhoNav):
-            if compmatriz5[escolhaLinha][escolhaColuna] == "-":
-                compmatriz5[escolhaLinha][escolhaColuna] = "1"
-                escolhaColuna = escolhaColuna - 1
-                tamanhoNav -= 1 
-                comparacao += 1
-            elif compmatriz5[escolhaLinha][escolhaColuna] == "1":
-                escolhaColuna = escolhaColuna + 1
-                compmatriz5[escolhaLinha][escolhaColuna] = "-"
-                tamanhoNav -= 1
-                comparacao = 0 
-        if comparacao == tamanhoCerto: 
-            compNav += 1
-    if escolhaLinha + tamanhoNav <= 10 and direcao == 2 and compmatriz5[escolhaLinha][escolhaColuna] == "-": 
-        for i in range(tamanhoNav):
-            if compmatriz5[escolhaLinha][escolhaColuna] == "-":
-                compmatriz5[escolhaLinha][escolhaColuna] = "1"
-                escolhaLinha = escolhaLinha + 1
-                tamanhoNav -= 1 
-                comparacao += 1
-            elif compmatriz5[escolhaLinha][escolhaColuna] == "1":
-                escolhaLinha = escolhaLinha - 1
-                compmatriz5[escolhaLinha][escolhaColuna] = "-"
-                tamanhoNav -= 1 
-                comparacao = 0
-        if comparacao == tamanhoCerto: 
-            compNav += 1
-    if escolhaLinha - tamanhoNav >= 0 and direcao == 3 and compmatriz5[escolhaLinha][escolhaColuna] == "-":            
-        for i in range(tamanhoNav):
-            if compmatriz5[escolhaLinha][escolhaColuna] == "-":
-                compmatriz5[escolhaLinha][escolhaColuna] = "1"
-                escolhaLinha = escolhaLinha - 1
-                tamanhoNav -= 1 
-                comparacao += 1
-            elif compmatriz5[escolhaLinha][escolhaColuna] == "1":
-                escolhaLinha = escolhaLinha + 1
-                compmatriz5[escolhaLinha][escolhaColuna] = "-"
-                tamanhoNav -= 1 
-                comparacao = 0
-        if comparacao == tamanhoCerto: 
-            compNav += 1
-    #impede que o computador escolhaColunaa no mesmo lugar
-    if compNav == 5:
-        break
-        
-#Define posições dos navios do jogador
-i = 0
-while playerNav < 10:
-    i += 1
-    linha = int(input(f"escolhaColunaa a {i}° linha do seu navio: "))
-    while linha > 10:
-        print("escolhaColunaa uma linha menor ou igual a 10!")
-        linha = int(input(f"escolhaColunaa a {i}° linha do seu navio: "))
+# Gera os navios do computador na matriz compmatriz5
+for tamanho in tamanhos_navios:
+    if colocar_navio_direcional(compmatriz5, tamanho):
+        compNav += tamanho
 
-    coluna = int(input(f"escolhaColunaa a {i}° coluna do seu navio: "))
-    while coluna > 10:
-        print("escolhaColunaa uma coluna menor ou igual a 10!")
-        coluna = int(input(f"escolhaColunaa a {i}° coluna do seu navio: "))
-
-    if linha <=10:
-        linha -= 1
-    if coluna <=10:
-        coluna -= 1
-
-    # impede que o jogador escolhaColunaa no mesmo lugar
-    if playermatriz5[linha][coluna] != "1":
-        playerNav +=1
-    else:
-        print("\nLinha e coluna já escolhaColunaida!\nescolhaColunaa outra!")
-        i -= 1
-    playermatriz5[linha][coluna] = "1"
-
-
-#printa tabuleiros e navios restantes
+# Gera os navios do jogador aleatoriamente na matriz playermatriz5
+print("\nPosicionando seus navios aleatoriamente no tabuleiro 10x10...")
+sleep(1)
+for tamanho in tamanhos_navios:
+    if colocar_navio_direcional(playermatriz5, tamanho):
+        playerNav += tamanho
+print("Seus navios foram posicionados!")
+sleep(1)
+for j in playermatriz5:
+        print(j)
+# Mostra os tabuleiros iniciais
 menucomp()
 menuplayer()
 
-
-#Roda enquanto tiver o computador ou jogador possuir navios
+# Loop principal do jogo
 while playerNav > 0 and compNav > 0:
 
-    # Ataque do player
+    # Ataque do jogador
+    print("\nSua vez de atacar!")
     playerLinha = atqPlayerLinha()
     playerColuna = atqPlayerColuna()
 
-    while tabuleiroComp[playerLinha][playerColuna] == "O" or tabuleiroComp[playerLinha][playerColuna] == "X":
-        print("\nLinha e Coluna já escolhaColunaidas!")
+    while tabuleiroComp[playerLinha][playerColuna] in ("O", "X"):
+        print("\nVocê já atirou aí! Escolha outra coordenada.")
         playerLinha = atqPlayerLinha()
         playerColuna = atqPlayerColuna()
-
 
     print("---------------------------------")
 
     if compmatriz5[playerLinha][playerColuna] == "1":
-        print("\nVocê derrubou um navio!")
+        print("\nFOGO! Você acertou um navio inimigo!")
         sleep(1)
         compNav -= 1
         tabuleiroComp[playerLinha][playerColuna] = "X"
-
     else:
-        print("\nVocê não acertou nenhum navio!")
+        print("\nÁGUA! Você errou o tiro.")
         sleep(1)
         tabuleiroComp[playerLinha][playerColuna] = "O"
 
+    if compNav == 0:
+        break
+
     menucomp()
 
-
-#Ataque do computador
-    compLinha = random.randint(0, 4)
+    # Ataque do computador
+    print("\nVez do computador atacar...")
+    sleep(1)
+    compLinha = random.randint(0, 9)
     compColuna = random.randint(0, 9)
 
-    while tabuleiroPlayer[compLinha][compColuna] == "O" or tabuleiroPlayer[compLinha][compColuna] == "X":
-        compLinha = random.randint(0, 4)
+    while tabuleiroPlayer[compLinha][compColuna] in ("O", "X"):
+        compLinha = random.randint(0, 9)
         compColuna = random.randint(0, 9)
 
-
-    print(f"\nComputador atacou sua linha {compLinha + 1} e coluna {compColuna + 1}")
+    print(f"\nComputador atacou a linha {compLinha + 1} e coluna {compColuna + 1}")
     sleep(1)
+    
+    # Lógica original: Verifica o acerto em 'playermatriz5', mas só atualiza 'tabuleiroPlayer'
     if playermatriz5[compLinha][compColuna] == "1":
-        print("\nDerrubaram um navio seu!\n")
+        print("\nCUIDADO! Atingiram um de seus navios!\n")
         sleep(1)
         playerNav -= 1
         tabuleiroPlayer[compLinha][compColuna] = "X"
     else:
-        print("\nNão derrubaram nenhum navio seu!\n")
+        print("\nUfa! O computador errou o tiro!\n")
         sleep(1)
         tabuleiroPlayer[compLinha][compColuna] = "O"
 
-    menuplayer()
+    menuplayer() # Chama a função que agora mostra o 'tabuleiroPlayer'
 
-#Printa vencedor e agradecimento
-if playerNav == 0:
-    print("Você perdeu! Vitória do Computador")
+
+# Resultado final
+print("---------------------------------")
+if playerNav <= 0:
+    print("\nFim de jogo! Você perdeu! O Computador venceu.")
 else:
-    print(f"Você Ganhou! Vitória do {player}")
+    print(f"\nFim de jogo! Parabéns, {player}! Você venceu!")
 
 sleep(1)
-print("Obrigado por jogar Batalha Naval \nFeito por \nEric Juan\nLuigi Bilyk\nGuilherme Albuquerque")
+print("\nObrigado por jogar Batalha Naval!")
+print("Feito por: Eric Juan, Luigi Bilyk, Guilherme Albuquerque")
