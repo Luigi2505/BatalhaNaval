@@ -45,6 +45,7 @@ def criarmatriz():
         coluna = ["-"] * 10
         matriz.append(coluna)
     return matriz
+
 playermatriz = criarmatriz()
 compmatriz = criarmatriz()
 tabuleiroComp = criarmatriz()
